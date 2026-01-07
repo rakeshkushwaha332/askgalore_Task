@@ -17,28 +17,7 @@ This is a sample MERN backend project demonstrating **user authentication** (sig
 - Passport.js for JWT verification
 - Postman for API testing
 
----
 
-
-## 🔹 Project Structure
-
-New_project1/
-│
-├── server.js
-├── .env
-├── models/
-│ ├── Users.js # User model
-│ └── Data.js # Sample data model
-├── routes/
-│ ├── authRoutes.js # Signup & Login routes
-│ └── dataRoutes.js # Data insertion & search
-└── config/
-└── passport.js # Passport JWT strategy
-
-yaml
-Copy code
-
----
 
 ## 🔹 Environment Variables (.env)
 
