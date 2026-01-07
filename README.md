@@ -1,142 +1,137 @@
-# MERN Backend - Authentication & Global Search API
+MERN Authentication & Global Search API
+A full-stack MERN backend API featuring JWT-based authentication and global search functionality. Built with Node.js, Express, and MongoDB, this project demonstrates secure user authentication and efficient data querying patterns.
 
-This is a sample MERN backend project demonstrating **user authentication** (signup & login) and **global search** on sample data, tested using **Postman**.
+Features
 
----
+Secure Authentication - JWT-based signup and login with bcrypt password hashing
+Protected Routes - Passport.js middleware for route authorization
+Global Search - Case-insensitive search across multiple data fields
+RESTful Design - Clean API architecture following REST principles
 
-## 🔹 Technologies Used
 
-- Node.js & Express.js
-- MongoDB & Mongoose
-- JWT Authentication
-- Bcrypt for password hashing
-- Passport.js for JWT verification
-- Postman for API testing
+Tech Stack
 
----
+Runtime: Node.js
+Framework: Express.js
+Database: MongoDB with Mongoose ODM
+Authentication: JWT (JSON Web Tokens)
+Security: Bcrypt for password hashing
+Authorization: Passport.js with JWT strategy
+Testing: Postman
 
-## 🔹 Project Structure
 
+Project Structure
 New_project1/
 │
-├── server.js
-├── .env
+├── server.js                 # Application entry point
+├── .env                      # Environment configuration
 ├── models/
-│ ├── Users.js # User model
-│ └── Data.js # Sample data model
+│   ├── Users.js             # User schema and model
+│   └── Data.js              # Sample data schema
 ├── routes/
-│ ├── authRoutes.js # Signup & Login routes
-│ └── dataRoutes.js # Data insertion & search
+│   ├── authRoutes.js        # Authentication endpoints
+│   └── dataRoutes.js        # Data management and search
 └── config/
-└── passport.js # Passport JWT strategy
+    └── passport.js          # JWT strategy configuration
 
-yaml
-Copy code
+Setup
+Prerequisites
 
----
+Node.js (v14 or higher)
+MongoDB (local or Atlas)
+Postman (for API testing)
 
-## 🔹 Environment Variables (.env)
+Installation
 
-```env
-PORT=5000
+Clone the repository
+
+bashgit clone <repository-url>
+cd New_project1
+
+Install dependencies
+
+bashnpm install
+
+Configure environment variables
+
+Create a .env file in the root directory:
+envPORT=5000
 MONGO_URI=mongodb://localhost:27017/your-db
 ACCESS_TOKEN_SECRET=yourAccessTokenSecret
 REFRESH_TOKEN_SECRET=yourRefreshTokenSecret
-🔹 APIs Overview
-1️⃣ Signup User
-URL: POST http://localhost:5000/api/auth/signup
 
-Headers:
+Start the server
 
-Content-Type: application/json
+bashnpm start
+The API will be available at http://localhost:5000
 
-Body (raw JSON):
-
-json
-Copy code
-{
+API Reference
+Authentication
+Signup
+Create a new user account.
+Endpoint: POST /api/auth/signup
+Request Body:
+json{
   "name": "John Doe",
   "email": "john@example.com",
   "password": "password123"
 }
 Response:
-
-json
-Copy code
-{
+json{
   "message": "User registered successfully"
 }
-2️⃣ Login User
-URL: POST http://localhost:5000/api/auth/login
 
-Headers:
-
-Content-Type: application/json
-
-Body (raw JSON):
-
-json
-Copy code
-{
+Login
+Authenticate and receive access tokens.
+Endpoint: POST /api/auth/login
+Request Body:
+json{
   "email": "john@example.com",
   "password": "password123"
 }
 Response:
-
-json
-Copy code
-{
+json{
   "accessToken": "<JWT_ACCESS_TOKEN>",
   "refreshToken": "<JWT_REFRESH_TOKEN>"
 }
-Use accessToken in Authorization header for protected routes:
+```
 
-makefile
-Copy code
+> **Note:** Copy the `accessToken` for use in protected route requests.
+
+---
+
+### Data Operations
+
+All data endpoints require authentication. Include the JWT token in the Authorization header:
+```
 Authorization: Bearer <JWT_ACCESS_TOKEN>
-3️⃣ Insert Random Sample Data
-URL: POST http://localhost:5000/api/data/insert-random
-
-Headers:
-
-Authorization: Bearer <JWT_ACCESS_TOKEN>
-
-Content-Type: application/json
-
-Body: None (data is inserted automatically)
-
+Insert Sample Data
+Populate the database with sample data for testing.
+Endpoint: POST /api/data/insert-random
 Response:
-
-json
-Copy code
-{
+json{
   "message": "Random data inserted"
 }
-Sample Data Inserted:
+```
 
+**Sample Data Includes:**
 Apple, Laptop, Car, Chair, T-Shirt, Book, Headphones, Coffee, Bicycle, Pen
 
-4️⃣ Global Search Query
-URL: GET http://localhost:5000/api/data/search?q=<searchTerm>
+---
 
-Headers:
+#### Global Search
+Search across all data fields with case-insensitive matching.
 
-Authorization: Bearer <JWT_ACCESS_TOKEN>
+**Endpoint:** `GET /api/data/search?q=<searchTerm>`
 
-Query Parameters:
+**Query Parameters:**
+- `q` (required) - Search term to match against title, description, or category
 
-q → Search term (title, description, or category)
-
-Example URL:
-
-bash
-Copy code
+**Example Request:**
+```
 GET http://localhost:5000/api/data/search?q=tech
-Response (JSON array of matching items):
-
-json
-Copy code
-[
+Response:
+json[
   {
     "_id": "64f2e8b1c5b1a123456789ab",
     "title": "Laptop",
@@ -152,34 +147,33 @@ Copy code
     "__v": 0
   }
 ]
-Notes:
+Search Capabilities:
 
-Search is case-insensitive
+Case-insensitive matching
+Searches across title, description, and category fields
+Returns all matching documents
 
-Searches across title, description, and category
 
-JWT is required
+Testing with Postman
+Recommended Testing Flow
 
-🔹 Postman Testing Flow
-Signup → Create a new user
+Create User - Send signup request to register a new account
+Authenticate - Login to receive JWT tokens
+Seed Data - Insert sample data using the random data endpoint
+Test Search - Query the search endpoint with various terms (e.g., "tech", "food", "apple")
 
-Login → Get accessToken and refreshToken
+Authorization Setup
+For all protected routes:
 
-Insert Random Data → Populate Data collection
+Select the request in Postman
+Go to the Authorization tab
+Select Bearer Token as type
+Paste your accessToken in the token field
 
-Global Search → Test search query using q parameter
 
-🔹 Quick Tips
-Always include JWT in Authorization header for protected routes
+Security Notes
 
-Use Bearer <accessToken> format
-
-You can test different search terms (apple, tech, food, etc.)
-
-Passwords are hashed using bcrypt
-
-🔹 License
-MIT License
-
-yaml
-Copy code
+All passwords are hashed using bcrypt before storage
+JWT tokens are required for accessing protected routes
+Use strong, unique secrets for ACCESS_TOKEN_SECRET and REFRESH_TOKEN_SECRET in production
+Never commit .env files to version control
